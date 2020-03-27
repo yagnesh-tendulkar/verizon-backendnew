@@ -1,0 +1,117 @@
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.btn1 {
+    border: 1px solid #b7b2b8;
+    background-color: #b7b2b3;
+    width: 100%;
+    border-radius: 5vh;
+    text-align: center;
+    font-weight: 2.5vh;
+}
+
+.box {
+    height: 70vh
+}
+
+.modal-title1 {
+    text-align: center;
+    padding: 1.5vh;
+    font-weight: 600;
+    background-color: #00aae7;
+}
+
+.visible-scrollbar,
+.invisible-scrollbar,
+.mostly-customized-scrollbar {
+    display: block;
+    width: auto;
+
+    overflow: auto;
+    height: 2em;
+}
+
+.mostly-customized-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+    background-color: #ffffff;
+}
+
+.mostly-customized-scrollbar::-webkit-scrollbar-thumb {
+    background: rgb(183, 179, 179);
+}
+
+
+
+.container::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.container img {
+    float: left;
+    max-width: 60px;
+    width: 100%;
+    margin-right: 20px;
+    border-radius: 50%;
+}
+
+.container img.right {
+    float: right;
+    margin-left: 20px;
+    margin-right: 0;
+}
+
+
+
+.time-left {
+    float: left;
+    color: #999;
+}
+
+#result {
+    float: left;
+    margin-right: 10vh;
+    background: dodgerblue;
+    padding: 1vh;
+    border: none;
+    border-bottom-left-radius: 0vh !important;
+    border-radius: 2vh;
+    min-width: auto;
+    width:50%;
+    word-break: break-word;
+    margin-top:4vh ;
+}
+
+#send {
+    margin-left: 10vh;
+    margin-top:4vh ;
+    width: 50%;
+    float: right;
+    background: lightgrey;
+    min-width: auto;    
+    padding: 1vh;
+    color: black;
+    border: none;
+    border-bottom-right-radius: 0vh !important;
+    border-radius: 2vh;
+    word-break: break-word;
+    text-align: end;
+}
+
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}
+
+.active{
+    background-color: #00aae7;
+}

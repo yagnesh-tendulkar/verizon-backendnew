@@ -1,0 +1,31 @@
+{
+  "name": "cl",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "@cloudant/cloudant": "^3.0.2",
+    "body-parser": "^1.19.0",
+    "cfenv": "^1.2.2",
+    "cors": "^2.8.5",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.x",
+    "express-session": "^1.16.2",
+    "mailer": "^0.6.7",
+    "mongodb": "^3.0.10",
+    "mongoose": "^5.6.6",
+    "node": "^12.12.0",
+    "nodemailer": "^6.3.1",
+    "request-promise": "^4.2.4",
+    "session": "^0.1.0",
+    "socket.io": "^2.2.0",
+    "twilio": "^3.33.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+   "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

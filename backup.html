@@ -1,0 +1,200 @@
+<html lang="en" class="h-100">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.6">
+    <title>Live Audio Transcription</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/sticky-footer-navbar/">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./styles.css">
+    <script>
+        var data
+        var chatdata = [
+            {
+            msgs: [{ from: "send", text: "hello from user1", time: 1584879869277 }, { from: "recv", text: "hello from user1", time: 1584879869277 },{ from: "send", text: "hello", time: 1584879869277 }, { from: "recv", text: "hello", time: 1584879869277 }],
+            _id: "+918464041124",
+            Name: "yagnesh",
+            address: "Miracle city",
+            PhoneNumber: "+918464041124",
+            date: "2020-03-22",
+            agent: true
+        }
+        ]
+        $(document).ready(function () {
+            chatdata.forEach(data => {
+                console.log(data.msgs[data.msgs.length - 2])
+                t=data.msgs[data.msgs.length - 1].time
+                date=new Date(t).getDate()+'/'+new Date(t).getMonth()+'/'+new Date(t).getFullYear()+'  '+new Date(t).getHours()+':'+new Date(t).getMinutes() 
+                $("#addPerson").append('<div onclick="select(event)"><img   src="amelia.png" alt="Avatar" style="width:100%;"><p id="getname" style="text-align:initial"> ' + data.Name + '</p><span class="time-right" style="margin-left:-7vh">' +date+ '</span></div>')
+            })
+        });
+        var activedata;
+        function fun(data) {
+            $("h1").hide();
+            $("#messages").append('<button style="width:auto" data-toggle="modal" data-target="#myModal" onClick="func(event)" class="btn1">' + data + '</button><br><br>');
+            $('#messages').scrollTop($('#messages')[0].scrollHeight);
+        }
+        function func(e) {
+            console.log(e.target.innerText)
+            document.getElementById('query').value = e.target.innerText
+        }
+        function enter(e) {
+            if (e.key == "Enter")
+                send()
+        }
+        function end() {
+            $.post("https://2df01def.ngrok.io/end", {}).done(function (data) {
+                console.log("");
+            });
+        }
+
+        function send() {
+            $('#messages1').scrollTop($('#messages1')[0].scrollHeight);
+
+            text = document.getElementById('query').value
+            console.log("<p id='send'>" + text + "</p>")
+            t = "<p id='send'>" + text + "</p>"
+            $(".modal-body").append(t);
+            $.post("https://2df01def.ngrok.io/getMessage", { "message": document.getElementById('query').value }).done(function (data) {
+                console.log("Data Loaded: " + data);
+                // $(".modal-body").append("<p id='result'>" + data + "</p><br>");
+            });
+            document.getElementById('query').value = ""
+        }
+        $('#select').click(function (e) {
+            alert()
+            text = e.target.value
+            console.log(e)
+        });
+        function accept(i) {
+            console.log(chatdata[i])
+            $.post("https://2df01def.ngrok.io/accept", { "name": activedata.Name,"to":activedata.PhoneNumber }).done(function (data) {
+                console.log("Data Loaded: " + data);
+
+            });
+        }
+        function select(e) {
+            console.log(document.getElementById('activename').innerHTML=="asdsad")
+            $('#act').addClass("active"); 
+            $('#messages1').empty()
+            activedata=""
+            console.log(e.target.innerText)
+            i = chatdata.findIndex(obj => obj.Name === e.target.innerText)
+            activedata=chatdata[i]
+            document.getElementById('activename').innerHTML=activedata.Name
+            console.log(activedata)
+            if(i>=0){
+            console.log(i)
+            accept(i)
+            msgs = activedata.msgs
+            console.log(msgs)
+            $('#query').prop("disabled", false)
+            msgs.forEach(element => {
+                console.log(element.text)
+                if (element.from == "send") {
+                    t = "<div id='send'>" + element.text + "</div>"
+                    $(".modal-body").append(t);
+                } else {
+                    $(".modal-body").append("<div id='result'>" + element.text + "</div><br>");
+                }
+            });
+        }
+
+        }
+        document.addEventListener("DOMContentLoaded", event => {
+            webSocket = new WebSocket("ws://localhost:4000");
+            webSocket.onmessage = function (msg) {
+
+                console.log(chatdata)
+                data = JSON.parse(msg.data);
+                chatdata.push(data)
+                console.log(data)
+                if (data.event == "request") {
+                    data = data.data
+                    console.log(data.msgs)
+                    $("#addPerson").append('<div id="act"><img src="amelia.png" alt="Avatar" style="width:100%;"><p id="getname" style="text-align:initial"> ' + data.Name + '</p><span class="time-right" style="margin-left=-7vh">' + new Date(data.msgs[data.msgs.length - 1].time) + '</span><div>')
+                }
+                if (data.event == "message") {
+                    $(".modal-body").append("<p id='result'>" + data.data + "</p><br>");
+                }
+
+            };
+        });
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+
+<body class="d-flex flex-column h-100">
+    <header>
+        <div class="d-flex justify-content-between mb-3" style="background:#232527">
+            <div class="p-2"><img src="imgs/logo.png" alt="Miracle"></div>
+            <div class="p-2">
+                <h2 class="text-white display-8">Live Agent Portal</h2>
+            </div>
+            <div class="p-2"><img height=50vh src="imgs/miraclelogos.png" alt="Miracle"></div>
+        </div>
+    </header>
+    <main role="main" class="flex-shrink-0">
+        <div class="container">            
+            <div class="row " style=" background-color: gainsboro;margin-right: 0px;margin-left: 0px;">
+                <div class=" col-sm-3" style="margin-right: 0px;margin-left: 0px;height:80vh">                    
+                    <div class="card text-center" style="background-color: gainsboro;height:75vh;width:100%;margin:auto;border:none">
+                        <div class="card-header" style="background-color:#00aae7;height: 8.3vh;margin-left:-2vh;margin-right: -2.5vh;">
+                            <h6 class="modal-title">User Requests </h6>
+                        </div>
+                        <div class="card-body mostly-customized-scrollbar" style="overflow-y:auto;">
+                            <div id="addPerson" style="background-color:#00aae7;margin-left: -2.5vh; margin-right: -2.5vh;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-9" style="margin-right: 0px;padding:0vh;margin-left: 0px;">
+                    <div class="modal-content " style="height:80vh">             
+                        <div class="modal-title1" >
+                          <div>
+                            <p id="activename"  style="float:left"></p>
+                            <button style="float:right;" onclick="end()" class="btn btn-danger">End Chat</button>
+                        </div>
+                        </div>
+                        <div class="mostly-customized-scrollbar d-flex flex-lg-column-reverse text-white" id="messages"
+                            style="height:65vh;overflow-x:hidden;overflow-y:auto">
+                            <div class="modal-body" id="messages1" style="width:100%">
+                         
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="padding: 1.2vh;">
+                            <input onkeypress="enter(event)" class="send" style="border: none;width:90%;height: 4vh;"
+                                disabled id="query" value="" placeholder="Say Something...." />
+                            <button type="button" class="btn btn-primary  btn btn-default" autofocus onClick="send()"
+                                data-dismiss="modal">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+    <footer style="background:#232527" class="footer mt-auto py-1">
+        <div class="flex">
+            <div class="d-flex justify-content-between">
+                <div class="p-2 text-white"> © 2020 <strong style="color:#00bfff;"> Miracle Software Systems
+                        Inc</strong></div>
+                <div class="p-2 text-white"> Built by <strong style="color:#00bfff;">Miracle’s Innovation Labs</strong>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
