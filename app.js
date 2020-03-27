@@ -24,12 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 var feedback = false
 var i = 0;
-//chanakya account
-const accountSid = 'AC9fe9723dc5c85b98f6e6a6a7dfc37370';
-const authToken = 'f71f70e61f6020ce4eae7b513a67c18a';
-//trail account
-// const accountSid = "AC59fc6cf08072dd44b82623f6785599be";
-// const authToken = "8f67b7d6a0e972901440b17c2bbf0927";
+
 const client = require('twilio')(accountSid, authToken);
 
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
